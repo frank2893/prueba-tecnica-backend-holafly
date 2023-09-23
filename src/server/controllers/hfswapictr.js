@@ -1,4 +1,5 @@
 const {peopleFactory} = require('../../app/People');
+const {planetFactory} = require('../../app/Planet');
 
 const test = async (res, app) => {
   const data = await app.swapiFunctions.genericRequest('https://swapi.dev/api/', 'GET', null, true);
@@ -13,21 +14,28 @@ const getPeople = async (req, res) => {
 
   const result = {
     id: data.id,
-    name: data.name,
-    mass: data.mass,
-    height: data.height,
-    homeworldName: data.homeworldName,
-    homeworlId: data.homeworlId,
+    name: data.getName(),
+    mass: data.getMass(),
+    height: data.getHeight(),
+    homeworldName: data.getHomeworldName(),
+    homeworlId: data.getHomeworlId(),
   };
 
   return res.status(200).json(result);
 };
 const getPlanet = async (req, res) => {
   const { id } = req.params;
+  const data = await planetFactory(id);
 
-  console.log("planet", id);
+  if (!Boolean(data.name)) return res.status(400).json({message: 'Planeta no encontrado'})
 
-  return id;
+  const result = {
+    id: data.id,
+    name: data.getName(),
+    gravity: data.getGravity(),
+  };
+
+  return res.status(200).json(result);
 };
 const getWeightOnPlanetRandom = async (req, res) => {};
 const getLogs = async (req, res, app) => {};
