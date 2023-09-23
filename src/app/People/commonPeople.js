@@ -30,7 +30,11 @@ class CommonPeople extends AbstractPeople {
 
   static getId( url ) {
     return url.slice(30, -1);
-  } 
+  }
+
+  async getWeightOnPlanet(planetId) {
+    
+  }
 }
 
 module.exports = CommonPeople;
