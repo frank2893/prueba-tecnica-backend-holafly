@@ -53,6 +53,13 @@ const getWeightOnPlanetRandom = async (req, res) => {
 };
 const getLogs = async (req, res, app) => {};
 
+const _isWookieeFormat = (req) => {
+  if (req.query.format && req.query.format == "wookiee") {
+    return true;
+  }
+  return false;
+};
+
 const RamdomId = (max) => {
   return Math.floor(Math.random() * max);
 };

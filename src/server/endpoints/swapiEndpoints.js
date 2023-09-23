@@ -1,11 +1,4 @@
-const _isWookieeFormat = (req) => {
-    if(req.query.format && req.query.format == 'wookiee'){
-        return true;
-    }
-    return false;
-};
 const { getPeople, getPlanet, getWeightOnPlanetRandom, getLogs, test } = require('../controllers/hfswapictr')
-
 
 const applySwapiEndpoints = (server, app) => {
     server.get('/hfswapi/getPeople/:id', getPeople);
