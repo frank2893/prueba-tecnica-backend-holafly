@@ -52,7 +52,11 @@ const getWeightOnPlanetRandom = async (req, res) => {
     return res.status(400).json({message: error.message})
   }
 };
-const getLogs = async (req, res, app) => {};
+const getLogs = async (req, res, app) => {
+  const fields = ["action", "header", "ip"];
+  const logs = await app.db.logging.findAll({ attributes: fields });
+  res.status(200).json(logs);
+};
 
 const _isWookieeFormat = (req) => {
   if (req.query.format && req.query.format == "wookiee") {
