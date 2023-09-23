@@ -1,5 +1,5 @@
 const AbstractPeople = require("./abstractPeople");
-const {swapiFunctions} = require("../index");
+const {swapiFunctions, db} = require("../index");
 const {planetFactory} = require('../../app/Planet');
 class CommonPeople extends AbstractPeople {
   constructor(id) {
@@ -13,19 +13,39 @@ class CommonPeople extends AbstractPeople {
   }
 
   async init() {
-    const url = `https://swapi.dev/api/people/${this.id}`;
-    const body = await swapiFunctions.genericRequest(url, 'GET', null)
-    this.name = Boolean(body.name) ? body.name : '';
-    this.mass = Boolean(body.mass) ? Number(body.mass) : '';
-    this.height = Boolean(body.height) ? Number(body.height) : '';
-    this.homeworlId = '';
-    this.homeworldName = '';
 
-    const PlanetId = CommonPeople.getId(body.homeworld);
-    const planet = await planetFactory(PlanetId);
+    const dbPeople = await db.swPeople.findByPk(this.id);
+    
+    if (dbPeople) {
+      this.name = dbPeople.name;
+      this.mass = dbPeople.mass;
+      this.height = dbPeople.height;
+      this.homeworldName = dbPeople.homeworld_name;
+      this.homeworlId = dbPeople.homeworld_id;
+    } else {
+      const url = `https://swapi.dev/api/people/${this.id}`;
+      const body = await swapiFunctions.genericRequest(url, "GET", null);
+      this.name = Boolean(body.name) ? body.name : "";
+      this.mass = Boolean(body.mass) ? Number(body.mass) : "";
+      this.height = Boolean(body.height) ? Number(body.height) : "";
+      this.homeworlId = "";
+      this.homeworldName = "";
 
-    this.homeworlId = Number(PlanetId);
-    this.homeworldName = Boolean(planet.name) ? planet.name : '';
+      const PlanetId = CommonPeople.getId(body.homeworld);
+      const planet = await planetFactory(PlanetId);
+
+      this.homeworlId = Number(PlanetId);
+      this.homeworldName = Boolean(planet.name) ? planet.name : "";
+
+      await db.swPeople.create({
+        id: this.id,
+        name: this.name,
+        mass: this.mass,
+        height: this.height,
+        homeworld_name: this.homeworldName,
+        homeworld_id: this.homeworlId,
+      });
+    }
   }
 
   static getId( url ) {

@@ -1,5 +1,5 @@
 const AbstractPeople = require("./abstractPeople");
-const {swapiFunctions} = require("../index");
+const {swapiFunctions, db} = require("../index");
 const {planetFactory} = require('../../app/Planet');
 
 class wookieePeople extends AbstractPeople {
@@ -14,20 +14,39 @@ class wookieePeople extends AbstractPeople {
   }
 
   async init() {
-    const url = `https://swapi.dev/api/people/${this.id}?format=wookiee`;
-    const body = await swapiFunctions.genericRequest(url, "GET", null);
+    const dbWooPeople = await db.swPeople.findByPk(this.id);
 
-    this.name = Boolean(body.whrascwo) ? body.whrascwo : "";
-    this.mass = Boolean(body.scracc) ? Number(body.scracc) : "";
-    this.height = Boolean(body.acwoahrracao) ? Number(body.acwoahrracao) : "";
-    this.homeworlId = "";
-    this.homeworldName = "";
+    if (dbWooPeople) {
+      this.name = dbWooPeople.name;
+      this.mass = dbWooPeople.mass;
+      this.height = dbWooPeople.height;
+      this.homeworldName = dbWooPeople.homeworld_name;
+      this.homeworlId = dbWooPeople.homeworld_id;
+    } else {
+      const url = `https://swapi.dev/api/people/${this.id}?format=wookiee`;
+      const body = await swapiFunctions.genericRequest(url, "GET", null);
 
-    const PlanetId = wookieePeople.getId(body.acooscwoohoorcanwa);
-    const planet = await planetFactory(PlanetId);
+      this.name = Boolean(body.whrascwo) ? body.whrascwo : "";
+      this.mass = Boolean(body.scracc) ? Number(body.scracc) : "";
+      this.height = Boolean(body.acwoahrracao) ? Number(body.acwoahrracao) : "";
+      this.homeworlId = "";
+      this.homeworldName = "";
 
-    this.homeworlId = Number(PlanetId);
-    this.homeworldName = Boolean(planet.name) ? planet.name : "";
+      const PlanetId = wookieePeople.getId(body.acooscwoohoorcanwa);
+      const planet = await planetFactory(PlanetId);
+
+      this.homeworlId = Number(PlanetId);
+      this.homeworldName = Boolean(planet.name) ? planet.name : "";
+
+      await db.swPeople.create({
+        id: this.id,
+        name: this.name,
+        mass: this.mass,
+        height: this.height,
+        homeworld_name: this.homeworldName,
+        homeworld_id: this.homeworlId,
+      });
+    }
   }
 
   async getWeightOnPlanet(planetId) {
