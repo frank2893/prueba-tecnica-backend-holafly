@@ -7,7 +7,9 @@ _Todas las instrucciones parten de la premisa de que el aspirante tiene una vers
 - Clonar este repositorio y realizar sobre el clon todos los cambios pedidos en el enunciado.
 - Instalar las librerias externas mediante `npm install` y ejecutar el servidor mediante `npm run dev`
 - Realizar los commits respetando la siguiente estructura:
+
    - `Acción (contexto): mensaje`, siendo:
+
       - Accion: `feat` para nuevas funcionalidades, `fix` para la corrección de errores, `refactor` para las tareas de refactorización de código o `chore` para cambios no relacionados con el código.
       - Contexto: una cadena descriptiva sobre la tarea que se está realiazndo
       - mensaje: un mensaje conciso sobre el cambio a realizar
@@ -71,4 +73,5 @@ El presente código despliega un servidor node.js/express sobre el que se busca 
 Adicionalmente a estos endpoints, se requiere ampliar el paquete `People` con las clases y funciones que sean necesarias para cubrir el caso de que el formato del objeto retornado por la SWAPI sea en idioma Wookiee.
 
 ## Resolución de la prueba
-Info: Dev: Franklin Orlando Marquez
+
+Info: Dev: Franklin Orlando Marquez Mora, Fecha: 23/09/2023, Git: https://github.com/frank2893
