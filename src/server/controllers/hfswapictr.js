@@ -7,8 +7,9 @@ const test = async (res, app) => {
 };
 const getPeople = async (req, res) => {
   const { id } = req.params;
+  const isWookiee = _isWookieeFormat(req);
 
-  const data = await peopleFactory(id, "notWookie")
+  const data = await peopleFactory(id, isWookiee ? "wookiee" : "notWookie");
 
   if (!Boolean(data.name)) return res.status(400).json({message: 'Personaje no encontrado'})
 

@@ -25,7 +25,7 @@ class CommonPeople extends AbstractPeople {
     const planet = await planetFactory(PlanetId);
 
     this.homeworlId = Number(PlanetId);
-    this.homeworldName = Boolean(planet.name) ? planet.name : '';;
+    this.homeworldName = Boolean(planet.name) ? planet.name : '';
   }
 
   static getId( url ) {
