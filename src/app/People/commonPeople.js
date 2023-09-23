@@ -1,5 +1,6 @@
 const AbstractPeople = require("./abstractPeople");
 const {swapiFunctions} = require("../index");
+const {planetFactory} = require('../../app/Planet');
 class CommonPeople extends AbstractPeople {
   constructor(id) {
     super(id)
@@ -21,7 +22,10 @@ class CommonPeople extends AbstractPeople {
     this.homeworldName = '';
 
     const PlanetId = CommonPeople.getId(body.homeworld);
-    console.log("planeta", PlanetId);
+    const planet = await planetFactory(PlanetId);
+
+    this.homeworlId = Number(PlanetId);
+    this.homeworldName = Boolean(planet.name) ? planet.name : '';;
   }
 
   static getId( url ) {
