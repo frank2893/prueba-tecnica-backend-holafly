@@ -33,7 +33,26 @@ class CommonPeople extends AbstractPeople {
   }
 
   async getWeightOnPlanet(planetId) {
+    const planet = await planetFactory(planetId);
+
+    if (!Boolean(planet.name)) throw new Error(`El planeta ingresado (${planetId}) no exite`)
+
+    if(planetId == this.homeworlId) throw new Error("Error: No se puede calcular en el planeta natal");
     
+    const result = swapiFunctions.getWeightOnPlanet(this.mass, planet.getGravity())
+    if(result) {
+      return {
+        success: true,
+        data: {
+          characterId: this.id,
+          homeWorldId: Number(this.homeworlId),
+          planetId: planetId,
+          characterWeight: result
+        }
+      }
+    } else { 
+      throw new Error(`Error: No se pudo calcular el peso del personaje`)  
+    }
   }
 }
 

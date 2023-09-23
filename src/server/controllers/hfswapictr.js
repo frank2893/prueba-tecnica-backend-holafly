@@ -37,7 +37,24 @@ const getPlanet = async (req, res) => {
 
   return res.status(200).json(result);
 };
-const getWeightOnPlanetRandom = async (req, res) => {};
+const getWeightOnPlanetRandom = async (req, res) => {
+  const RandomPlanet = RamdomId(60);
+  const RandomPeople = RamdomId(82);
+
+  const people = await peopleFactory(RandomPeople, "");
+  if (!Boolean(people.name)) return res.status(400).json({message: 'Personaje no encontrado'})
+
+  try {
+    const result = await people.getWeightOnPlanet(RandomPlanet)
+    return res.json(result.data); 
+  } catch (error) {
+    return res.status(400).json({message: error.message})
+  }
+};
 const getLogs = async (req, res, app) => {};
+
+const RamdomId = (max) => {
+  return Math.floor(Math.random() * max);
+};
 
 module.exports = {test, getPeople, getPlanet, getWeightOnPlanetRandom, getLogs};
