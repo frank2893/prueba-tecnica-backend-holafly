@@ -11,7 +11,7 @@ class Planet {
     const body = await swapiFunctions.genericRequest(url, "GET", null);
     
     this.name = body.name;
-    this.gravity = Planet.fixGravity(body.gravity);
+    this.gravity = Boolean(body.gravity) ? Planet.fixGravity(body.gravity) : '';
     
   }
 
